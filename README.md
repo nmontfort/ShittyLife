@@ -10,6 +10,11 @@ $ git clone https://github.com/nicowww/ShittyLife.git && cd ShittyLife
 $ npm install
 ```
 
+Create directory .tmp 
+``` bash
+$ mkdir .tmp
+```
+
 ## Start app
 
 **Create a database:**
