@@ -2,23 +2,42 @@ var request = require("request");
 var cheerio = require("cheerio");
 var fs = require("fs");
 
-//var nb_posts = 200;
-var nb_posts = 200;
-var nb_per_page = 13;
-var nb_pages = Math.ceil(nb_posts / nb_per_page) + 1;
+// Parameters 
+var nb_posts = 200;		// Number of posts
+var nb_per_page = 13;	// Number posts per page
+var debug = 1;				// Debug mode (0/1)
 
-var current_page = 0;
-var current_post = 0;
-
-var debug = 1;
+// Web site uri
+var vdm_base_uri = "http://www.viedemerde.fr";
 
 // If you want to change the database name, you need to change
 // the sails config (config/connections.js)
-//var json_output_file = "./.tmp/localDiskDb.db";
-var json_output_file = "populate.json";
-var vdm_base_uri = "http://www.viedemerde.fr";
+var json_output_file = "./.tmp/localDiskDb.db";
 
-// Delete database
+var i_nb_posts = nb_posts;
+var nb_pages = Math.ceil(nb_posts / nb_per_page) + 1;
+var current_page = 0;
+var current_post = 0;
+
+// Json structure for Sails
+var json_output = {
+		'data' : {
+			'posts' : []
+		},
+		'schema' : {
+		  "posts": {
+		    "content": {"type": "string"},
+		    "datetime": {"type": "date"},
+		    "author": {"type": "string"},
+		    "id": {"type": "integer", "primaryKey": true, "unique": true},
+		  }
+		},
+		'counters' : {
+			"posts": {"id": nb_posts}
+		}
+};
+
+// Delete database file
 fs.unlink(json_output_file, function(err) {
    if (err) { return console.error(err); }
    console.log('File', json_output_file, 'deleted successfully!');
@@ -32,7 +51,7 @@ while (current_page < nb_pages) {
 		if (!error && response.statusCode == 200) {
 			var $ = cheerio.load(body);
 				
-				// Search datas
+				// Search vdm content
 				$('.article').each(function() {
 						var content = $(this).children().first().text();
 						var datas = $(this).children().next().children().next().children().next().text();
@@ -43,24 +62,27 @@ while (current_page < nb_pages) {
 							console.log(line[1]);	//date
 							console.log(line[3]);	//time
 							console.log(line[8]);	//author
-							console.log(json_output);
 						}
-						
-						// Make a JSON
-						var json_output = JSON.stringify({content: content, date: line[1] + " " + line[3], author: line[8], id: nb_posts});
-						
-						// Write JSON into database
-						if (nb_posts > 0) {
-							fs.appendFileSync(json_output_file, json_output + ",");
+
+						// Create a limit and write database file
+						if (json_output.data.posts.length < nb_posts && i_nb_posts > 0) {
+							json_output.data.posts.push({content: content, date: line[1] + " " + line[3], author: line[8], id: i_nb_posts});											
+						}else{
+							if (json_output.data.posts.length == nb_posts && i_nb_posts == 0) {
+								fs.appendFileSync(json_output_file, JSON.stringify(json_output));
+							}
 						}
-						
-						nb_posts--;
-				});
-				
+
+						i_nb_posts--;
+				});				
 			
 		}else{
 			return console.error('GET', vdm_uri, 'ERR');
-		}
+		}		
 	});
 	current_page++;
+
+	// force request sync
+	setTimeout(function(){
+	}, 2000);
 }
