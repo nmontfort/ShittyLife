@@ -1,2 +1,2 @@
 # ShittyLife
-A web REST API for viedemerde.fr
+A REST API for viedemerde.fr
