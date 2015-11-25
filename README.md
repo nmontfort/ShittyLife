@@ -24,17 +24,17 @@ $ sails lift
 ```
 
 ## Usage
-Get all posts
+Get all posts<br>
 localhost:1337/posts
 
-Get post by id
+Get post by id<br>
 localhost:1337/posts/id
 
-Get posts by author name
+Get posts by author name<br>
 localhost:1337/posts?author=name
 
-Get posts by date (dd/mm/YYYY HH:mm)
+Get posts by date (dd/mm/YYYY HH:mm)<br>
 localhost:1337/posts?date=datetime
 
-Get posts by date and author name
+Get posts by date and author name<br>
 localhost:1337/posts?date=datetime&author=name
