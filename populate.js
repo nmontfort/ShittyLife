@@ -5,7 +5,7 @@ var fs = require("fs");
 // Parameters 
 var nb_posts = 200;		// Number of posts
 var nb_per_page = 13;	// Number posts per page
-var debug = 1;				// Debug mode (0/1)
+var debug = 0;				// Debug mode (0/1)
 
 // Web site uri
 var vdm_base_uri = "http://www.viedemerde.fr";
@@ -21,18 +21,18 @@ var current_post = 0;
 
 // Json structure for Sails
 var json_output = {
-		'data' : {
+		"data" : {
 			'posts' : []
 		},
-		'schema' : {
+		"schema" : {
 		  "posts": {
 		    "content": {"type": "string"},
-		    "datetime": {"type": "date"},
+		    "date": {"type": "date"},
 		    "author": {"type": "string"},
 		    "id": {"type": "integer", "primaryKey": true, "unique": true},
 		  }
 		},
-		'counters' : {
+		"counters" : {
 			"posts": {"id": nb_posts}
 		}
 };
@@ -57,11 +57,11 @@ while (current_page < nb_pages) {
 						var datas = $(this).children().next().children().next().children().next().text();
 						var line = datas.split(/\s/);
 						if (debug) { 
-							console.log("###");
-							console.log(content);
-							console.log(line[1]);	//date
-							console.log(line[3]);	//time
-							console.log(line[8]);	//author
+							console.log('###');
+							console.log('Content:', content);
+							console.log('Date:', line[1]);	//date
+							console.log('Time:', line[3]);	//time
+							console.log('Author:', line[8]);	//author
 						}
 
 						// Create a limit and write database file

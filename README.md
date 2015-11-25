@@ -2,7 +2,7 @@
 
 The [Sails](http://sailsjs.org) API for VDM
 
-## Installation &nbsp;
+## Installation
 
 ``` bash
 $ git clone https://github.com/nicowww/ShittyLife.git && cd ShittyLife
@@ -22,3 +22,19 @@ $ node populate.js
 ``` bash
 $ sails lift
 ```
+
+## Usage
+Get all posts
+localhost:1337/posts
+
+Get post by id
+localhost:1337/posts/id
+
+Get posts by author name
+localhost:1337/posts?author=name
+
+Get posts by date (dd/mm/YYYY HH:mm)
+localhost:1337/posts?date=datetime
+
+Get posts by date and author name
+localhost:1337/posts?date=datetime&author=name
