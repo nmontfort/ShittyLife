@@ -1,2 +1,3 @@
 # ShittyLife
-A REST API for viedemerde.fr
+
+a [Sails](http://sailsjs.org) application
